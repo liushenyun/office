@@ -1,0 +1,217 @@
+.box {
+    font-size: .44rem
+}
+.index-con {
+    position: relative;
+    min-height: 100%;
+}
+.index-top-outer {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: #FFF;
+    padding: .1rem .2rem;
+    z-index: 99;
+}
+.index-build-ul {
+    overflow: hidden;
+    font-size: .26rem;
+}
+.index-build-ul li {
+    float: left;
+    padding: .15rem .3rem;
+    border-radius: .32rem;
+    transition: all 0.2s linear;
+}
+.index-build-ul li.active {
+    background: #34A1FC;
+    color: #FFF;
+}
+
+.index-status-ul {
+    height: .88rem;
+    align-items: center;
+    display: flex;
+    font-size: .28rem;
+}
+.index-status-ul li {
+    width: 33%;
+    text-align: center;
+}
+.index-status-ul li.active {
+    color: #34A1FC;
+}
+.index-status-ul li.active span {
+    background: url('./img/up.png') no-repeat right center;
+    background-size: .26rem .26rem;
+}
+.index-status-ul li span {
+    display: inline-block;
+    padding-right: .38rem;
+    background: url('./img/down.png') no-repeat right center;
+    background-size: .26rem .26rem;
+}
+.index-of-outer {
+    padding-top: 1.9rem;
+}
+.index-of-ul {
+    overflow: hidden;
+    padding: .1rem .3rem;
+}
+.index-of-ul li {
+    box-sizing: border-box;
+    width: 49%;
+    height: auto;
+    padding: .24rem;
+    background: #FFF;
+    float: left;
+    margin-bottom: .24rem;
+}
+.index-of-ul li:nth-child(odd) {
+    margin-right: 2%;
+}
+
+.of-no {
+    height: .62rem;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: .23rem;
+}
+.of-no span:nth-of-type(1) {
+    font-size: .44rem;
+    font-weight:600;
+}
+.of-no span:nth-of-type(1) {
+    font-size: .32rem;
+}
+.of-order {
+    font-size: .24rem;
+    color: #666;
+}
+
+.of-order .ordered-name {
+    color: #999;
+}
+.of-order .order-active {
+    color: #34A1FC;
+    display: none;
+}
+.of-order .order-active,
+.of-order .ordered-tip,
+.of-order .ordered-name {
+    height: .34rem;
+    line-height: .34rem;
+}
+.of-btn {
+    height: .6rem;
+    line-height: .6rem;
+    margin-top: .16rem;
+    text-align: center;
+    font-size: .26rem;
+    color: #34A1FC;
+    background:rgba(52,161,252,0.2);
+    border-radius: .04rem;
+}
+.of-btn.of-btn-disable {
+    color: #999999;
+    background:#F5F5F5;
+}
+.index-pop-outer {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,.4);
+    padding-top: 1.70rem;
+}
+.index-pop-outer .index-pop-con {
+    background: #FFF;
+    padding: .3rem;
+}
+.index-pop-outer .pop-title {
+    font-size: .32rem;
+    margin-bottom: .2rem;
+    font-weight: bolder;
+    letter-spacing: .04rem;
+}
+.people-outer {
+    display: block
+}
+.status-outer {
+    display: none
+}
+.tv-outer {
+    display: none
+}
+.pop-same-ul {
+    overflow: hidden;
+}
+.pop-same-ul li {
+    float: left;
+    height: .6rem;
+    line-height: .6rem;
+    margin-bottom: .2rem;
+    width: 46%;
+    text-align: center;
+    background:rgba(245,245,245,1);
+    border-radius: .04rem;
+}
+.pop-same-ul li:nth-child(odd) {
+    margin-right: 8%;
+}
+.pop-same-ul li.active {
+    color: #34A1FC;
+    background:rgba(52,161,252,0.15);
+}
+.um-outer {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 102;
+    display: none;
+}
+.um-outer .um-inner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 5.6rem;
+    transform: translate(-50%, -50%);
+    padding: .6rem .3rem 0 .3rem;
+    background: #FFF;
+    border-radius: .2rem;
+}
+.um-inner input {
+    width: 100%;
+    height: .7rem;
+    padding: 0 .24rem;
+    font-size: .28rem;
+    background: #F5F5F5;
+    border-radius: .04rem;
+    margin: .5rem 0 .24rem;
+}
+.um-title {
+    font-size: .36rem;
+    text-align: center;
+}
+.um-tip {
+    height: .42rem;
+    font-size:24px;
+    color:#666;
+    line-height:.42rem;
+    margin-bottom: .5rem;
+}
+.um-btn {
+    text-align: center;
+    height: .98rem;
+    line-height: .98rem;
+    font-size: .36rem;
+    color: #34A1FC;
+    border-top: 1px solid #D1D1D1;
+}

@@ -1,0 +1,90 @@
+.office-container {
+    height: 100%;
+    background: url('./img/bg.png') no-repeat left bottom;
+    background-size: 100% 1.82rem;
+}
+.time-outer {
+    padding: .4rem .3rem .8rem .3rem;
+    background: #FFF;
+    
+}
+.time-wrap {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+.time-inner {
+    width: 100%;
+    overflow: auto;
+    margin-top: .7rem;
+}
+.status-title {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: .46rem;
+    line-height: .46rem;
+    font-size: .32rem;
+    letter-spacing: .04rem;
+    margin-bottom: .7rem;
+}
+.status-title:nth-of-type(2) {
+    top: 3.12rem;
+}
+.status-x,
+.status-x-time {
+    /* 720 * 3 */
+    width: 21.60rem; 
+}
+
+.status-x {
+    height: 1.6rem;
+    border-bottom: .01rem solid #CCCCCC;
+}
+.x-1 {
+    margin-top: 1.1rem;
+}
+.status-x-time {
+    height: .46rem;
+    display: flex;
+    align-items: center;
+}
+.office-yu-ul {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+.office-yu-ul li {
+    flex: 1;
+    height: 100%;
+    border-right: .02rem solid #FFF;
+    background: red;
+    box-sizing: border-box;
+}
+.status-x-time li {
+    flex: 1;
+    color: #666;
+    font-size: .20rem;
+    text-align: left;
+}
+
+.status-des-outer {
+    display: flex;
+    justify-content: center;
+    margin-top: .3rem;
+}
+.status-des-outer span {
+    margin-right: .32rem;
+    text-align: center;
+    font-size: .24rem;
+    color: #666;
+}
+.status-des-outer span .co {
+    width: .24rem;
+    height: .24rem;
+    display: inline-block;
+    background: red;
+}
+.status-des-outer span:last-of-type {
+    margin-right: 0;
+}

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" style="font-size: 75px">
+<head>
+    <meta charset="utf-8"> 
+    <!--允许全屏--> 
+    <meta content="yes" name="apple-mobile-web-app-capable"> 
+    <meta content="yes" name="apple-touch-fullscreen"> 
+    <meta content="telephone=no,email=no" name="format-detection"> 
+    <title>会议室</title>
+    <link rel="stylesheet" href="./lib/reset.css">
+    <link rel="stylesheet" href="./lib/index.css">
+    <script src="./lib/jquery-3.4.1.min.js"></script>
+    <script src='./lib/flexible.js'></script>
+    <style>
+        body,
+        html {
+            color: #333
+        }
+    </style>
+</head>
+<body>
+    <div class="index-con">
+        <div class="index-top-outer">
+            <ul class="index-build-ul" id="index-build-ul-id">
+                <li class="active">总行</li>
+                <li>保税区</li>
+                <li>深业大厦</li>
+            </ul>
+            <ul class="index-status-ul" id="index-status-ul-id">
+                <li data-type='0' class="active">
+                    <span>参会人数</span>
+                </li>
+                <li data-type='1'><span>视频会议</span></li>
+                <li data-type='2'><span>状态</span></li>
+            </ul>
+        </div>
+        
+        <div class="index-of-outer">
+            <ul class="index-of-ul">
+                <li>
+                    <div class="of-no">
+                        <span>504</span>
+                        <span>5人</span>
+                    </div>
+                    <div class="of-order">
+                        <div class="order-active">立即预定</div>
+                        <div class="ordered-tip">已经预定</div>
+                        <div class="ordered-name">崔永斌：18823668888</div>
+                    </div>
+                    <div class="of-btn">
+                        锁定
+                    </div>
+                </li>
+                <li>
+                    <div class="of-no">
+                            <span>504</span>
+                            <span>5人</span>
+                    </div>
+                    <div class="of-order">
+                        <div class="order-active">立即预定</div>
+                        <div class="ordered-tip">已经预定</div>
+                        <div class="ordered-name">崔永斌：18823668888</div>
+                    </div>
+                    <div class="of-btn of-btn-disable">
+                        已锁定
+                    </div>
+                </li>
+                <li>1</li>
+                <li>1</li>
+                <li>1</li>
+                <li>1</li>
+            </ul>
+        </div>
+
+        <div class="um-outer">
+            <div class="um-inner">
+                <div class="um-title">请输入UM账号</div>
+                <input type="text" placeholder="请输入UM">
+                <div class="um-tip">正在锁定的会议室:总 _银行</div>
+                <div class="um-btn">确认锁定</div>
+            </div>
+        </div>
+        <!-- 状态弹框 -->
+        <div class="index-pop-outer" id="index-pop-outer-id" style="display: none">
+            <div class="index-pop-con">
+                <div class="pop-title">参会人数</div>
+                <!-- 参会人数 -->
+                <div class="people-outer-stop">
+                    <div class="people-outer pop-in-same">
+                        <ul class="pop-same-ul" id="people-outer-ul">
+                            <li class="active">1-10人</li>
+                            <li>1-10人</li>
+                            <li>1-10人</li>
+                            <li>1-10人</li>
+                        </ul>
+                    </div>
+
+                    <div class="status-outer pop-in-same">
+                        <ul class="pop-same-ul" id="status-outer-ul">
+                            <li class="active">闲</li>
+                            <li>忙</li>
+                        </ul>
+                    </div>
+
+                    <div class="tv-outer pop-in-same">
+                        <ul class="pop-same-ul" id="tv-outer-ul">
+                            <li class="active">是</li>
+                            <li>否</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src='./lib/tools.js'></script>
+    <script>
+        $(function() {
+            var Page = {
+                const: {
+
+                },
+                init: function() {
+                    console.log(window.Tools);
+                    this.bindEvent()
+                },
+                bindEvent: function() {
+                    $('#index-build-ul-id').on('click', 'li', function(event) {
+                        var _this = $(this)
+                        if (!_this.hasClass('actice')) {
+                            _this.addClass('active').siblings().removeClass('active')
+                        }
+                    })
+                    $('#index-status-ul-id').on('click', 'li', function(event) {
+                        var _this = $(this)
+                        $('#index-pop-outer-id').fadeIn();
+                        if (!_this.hasClass('actice')) {
+                            var _type = _this.data('type')
+                            _this.addClass('active').siblings().removeClass('active')
+                            if (_type == 0) {
+                                $('.pop-title').text('参会人数')
+                                $('.pop-in-same').eq(0).fadeIn().siblings().fadeOut(0)
+                            } else if (_type == 1) {
+                                $('.pop-title').text('视频会议')
+                                $('.pop-in-same').eq(1).fadeIn().siblings().fadeOut(0)
+                            } else if (_type == 2) {
+                                $('.pop-title').text('空闲状态')
+                                $('.pop-in-same').eq(2).fadeIn().siblings().fadeOut(0)
+                            }
+                            
+                        }
+                    })
+
+                    $('#people-outer-ul').on('click', 'li', function() {
+                        var _this = $(this)
+                        if (!_this.hasClass('actice')) {
+                            _this.addClass('active').siblings().removeClass('active')
+                        }
+                    })
+
+                    $('#status-outer-ul').on('click', 'li', function() {
+                        var _this = $(this)
+                        if (!_this.hasClass('actice')) {
+                            _this.addClass('active').siblings().removeClass('active')
+                        }
+                    })
+
+                    $('#tv-outer-ul').on('click', 'li', function() {
+                        var _this = $(this)
+                        if (!_this.hasClass('actice')) {
+                            _this.addClass('active').siblings().removeClass('active')
+                        }
+                    })
+                    $('.index-pop-con').on('click', function(event) {
+                        event.stopPropagation();
+                    })
+                    $('#index-pop-outer-id').on('click', function(event) {
+                        $(this).fadeOut()
+                    })
+                }
+            }
+            Page.init()
+        })
+    </script>
+</body>
+</html>
