@@ -22,22 +22,23 @@
     <div class="index-con">
         <div class="index-top-outer">
             <ul class="index-build-ul" id="index-build-ul-id">
-                <li class="active">总行</li>
-                <li>保税区</li>
-                <li>深业大厦</li>
+                <li data-type="ZY">总行</li>
+                <li data-type="SYDS" class="active">深业大厦</li>
+                <li data-type="BSQ">保税区</li>
+                <li data-type="LJZ">陆家嘴</li>
             </ul>
             <ul class="index-status-ul" id="index-status-ul-id">
                 <li data-type='0' class="active">
                     <span>参会人数</span>
                 </li>
-                <li data-type='1'><span>视频会议</span></li>
-                <li data-type='2'><span>状态</span></li>
+                <li data-type='1'><span>状态</span></li>
+                <li data-type='2'><span>视频会议</span></li>
             </ul>
         </div>
         
         <div class="index-of-outer">
-            <ul class="index-of-ul">
-                <li>
+            <ul class="index-of-ul" id="index-of-ul-id">
+                <li data-office='503'>
                     <div class="of-no">
                         <span>504</span>
                         <span>5人</span>
@@ -51,7 +52,7 @@
                         锁定
                     </div>
                 </li>
-                <li>
+                <li data-office='504'>
                     <div class="of-no">
                             <span>504</span>
                             <span>5人</span>
@@ -65,19 +66,18 @@
                         已锁定
                     </div>
                 </li>
-                <li>1</li>
-                <li>1</li>
-                <li>1</li>
-                <li>1</li>
             </ul>
         </div>
 
         <div class="um-outer">
             <div class="um-inner">
                 <div class="um-title">请输入UM账号</div>
-                <input type="text" placeholder="请输入UM">
+                <input id="um-input" type="text" placeholder="请输入UM">
                 <div class="um-tip">正在锁定的会议室:总 _银行</div>
-                <div class="um-btn">确认锁定</div>
+                <div class="um-btn">
+                    <span id="um-btn-sure">确认锁定</span>
+                    <span id="um-btn-cancel">取消</span>
+                </div>
             </div>
         </div>
         <!-- 状态弹框 -->
@@ -88,27 +88,31 @@
                 <div class="people-outer-stop">
                     <div class="people-outer pop-in-same">
                         <ul class="pop-same-ul" id="people-outer-ul">
-                            <li class="active">1-10人</li>
-                            <li>1-10人</li>
-                            <li>1-10人</li>
-                            <li>1-10人</li>
+                            <li data-type="A" class="active">1-10人</li>
+                            <li data-type="B">10-20人</li>
+                            <li data-type="C">20-30人</li>
+                            <li data-type="D">30-40人</li>
+                            <li data-type="E">40-50人</li>
+                            <li data-type="F">50人以上</li>
                         </ul>
                     </div>
 
                     <div class="status-outer pop-in-same">
                         <ul class="pop-same-ul" id="status-outer-ul">
-                            <li class="active">闲</li>
-                            <li>忙</li>
+                            <li data-type='0' class="active">闲</li>
+                            <li data-type='1'>忙</li>
                         </ul>
                     </div>
 
                     <div class="tv-outer pop-in-same">
                         <ul class="pop-same-ul" id="tv-outer-ul">
-                            <li class="active">是</li>
-                            <li>否</li>
+                            <li data-type='Y' class="active">是</li>
+                            <li data-type='N'>否</li>
                         </ul>
                     </div>
                 </div>
+
+                <div class="index-search-btn">确定</div>
             </div>
         </div>
     </div>
@@ -117,16 +121,40 @@
         $(function() {
             var Page = {
                 const: {
-
+                    pageParams: {
+                        officeSite: 'SYDS', // 职场: 保税区：BSQ；陆家嘴：LJZ；深业大厦：SYDS
+                        isVideo: 'Y', // 视频会议： 是：Y；否：N
+                        officeStatus: '0', // 会议室状态: 忙：1；闲：0
+                        scale: 'A' // A：1-10人；B：10-20人；C：20-30人；D：30-40人；E：40-50人；F：50人以上
+                    }
                 },
                 init: function() {
-                    console.log(window.Tools);
+                    Tools.toast('视频会议')
+                    setTimeout(function(){
+                        Tools.toast('446')
+                    }, 900)
+                    console.log(Page.const.pageParams);
                     this.bindEvent()
+                    this.getData()
+                },
+                getData: function() {
+                    Tools.request({
+                        url: Tools.constant.apiOfficeDetail,
+                        type: 'GET',
+                        data: {
+                            officeSite: 'SYDS',
+                            officeCode: '2303',
+                            date: '2019-06-28'
+                        }
+                    })
                 },
                 bindEvent: function() {
                     $('#index-build-ul-id').on('click', 'li', function(event) {
                         var _this = $(this)
                         if (!_this.hasClass('actice')) {
+                            var _type = _this.data('type')
+                            console.log(_type);
+                            Page.const.pageParams.officeSite = _type
                             _this.addClass('active').siblings().removeClass('active')
                         }
                     })
@@ -140,10 +168,10 @@
                                 $('.pop-title').text('参会人数')
                                 $('.pop-in-same').eq(0).fadeIn().siblings().fadeOut(0)
                             } else if (_type == 1) {
-                                $('.pop-title').text('视频会议')
+                                $('.pop-title').text('空闲状态')
                                 $('.pop-in-same').eq(1).fadeIn().siblings().fadeOut(0)
                             } else if (_type == 2) {
-                                $('.pop-title').text('空闲状态')
+                                $('.pop-title').text('视频会议')
                                 $('.pop-in-same').eq(2).fadeIn().siblings().fadeOut(0)
                             }
                             
@@ -153,6 +181,9 @@
                     $('#people-outer-ul').on('click', 'li', function() {
                         var _this = $(this)
                         if (!_this.hasClass('actice')) {
+                            var _type = _this.data('type')
+                            console.log(_type);
+                            Page.const.pageParams.scale = _type
                             _this.addClass('active').siblings().removeClass('active')
                         }
                     })
@@ -160,6 +191,9 @@
                     $('#status-outer-ul').on('click', 'li', function() {
                         var _this = $(this)
                         if (!_this.hasClass('actice')) {
+                            var _type = _this.data('type')
+                            console.log(_type);
+                            Page.const.pageParams.officeStatus = _type
                             _this.addClass('active').siblings().removeClass('active')
                         }
                     })
@@ -167,6 +201,9 @@
                     $('#tv-outer-ul').on('click', 'li', function() {
                         var _this = $(this)
                         if (!_this.hasClass('actice')) {
+                            var _type = _this.data('type')
+                            console.log(_type);
+                            Page.const.pageParams.isVideo = _type
                             _this.addClass('active').siblings().removeClass('active')
                         }
                     })
@@ -175,6 +212,31 @@
                     })
                     $('#index-pop-outer-id').on('click', function(event) {
                         $(this).fadeOut()
+                    })
+                    $('.index-search-btn').on('click', function() {
+                        console.log(Page.const.pageParams)
+                        setTimeout(function() {
+                            $('#index-pop-outer-id').fadeOut()
+                        }, 1000)
+                    })
+                    $('#index-of-ul-id').on('click', 'li', function() {
+                        var _type = $(this).data('office')
+                        location.href ='./office.html?officeSite=SYDS&officeCode=2303'
+                        console.log(_type)
+                    })
+                    $('#index-of-ul-id').on('click', 'li .of-btn', function(event) {
+                        if (!$(this).hasClass('of-btn-disable')) {
+                            $('.um-outer').fadeIn()
+                        }
+                        event.stopPropagation();
+                    })
+                    $('#um-btn-sure').on('click', function(event) {
+                        var _value = $('#um-input').val()
+                        event.stopPropagation()
+                    })
+                    $('#um-btn-cancel').on('click', function(event) {
+                        $('.um-outer').fadeOut()
+                        event.stopPropagation()
                     })
                 }
             }

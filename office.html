@@ -56,58 +56,60 @@
                     </div>
                     <ul class="status-x-time">
                         <li>8:00</li>
+                        <li>8:30</li>
+                        <li>9:00</li>
                         <li>9:30</li>
+                        <li>10:00</li>
                         <li>10:30</li>
                         <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
-                        <li>11:00</li>
+                        <li>11:30</li>
+                        <li>12:00</li>
+                        <li>12:30</li>
+                        <li>13:00</li>
+                        <li>13:30</li>
+                        <li>14:00</li>
+                        <li>14:30</li>
+                        <li>15:00</li>
+                        <li>15:30</li>
+                        <li>16:00</li>
+                        <li>16:30</li>
+                        <li>17:00</li>
+                        <li>18:30</li>
+                        <li>19:00</li>
+                        <li>19:30</li>
+                        <li>20:00</li>
+                        <li>20:30</li>
                     </ul>
                     <div class="status-x x-1">
-                        4554545454545454
+                        <ul>
+                           
+                        </ul>
                     </div>
                     <ul class="status-x-time">
-                            <li>8:00</li>
-                            <li>9:30</li>
-                            <li>10:30</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
-                            <li>11:00</li>
+                        <li>8:00</li>
+                        <li>8:30</li>
+                        <li>9:00</li>
+                        <li>9:30</li>
+                        <li>10:00</li>
+                        <li>10:30</li>
+                        <li>11:00</li>
+                        <li>11:30</li>
+                        <li>12:00</li>
+                        <li>12:30</li>
+                        <li>13:00</li>
+                        <li>13:30</li>
+                        <li>14:00</li>
+                        <li>14:30</li>
+                        <li>15:00</li>
+                        <li>15:30</li>
+                        <li>16:00</li>
+                        <li>16:30</li>
+                        <li>17:00</li>
+                        <li>18:30</li>
+                        <li>19:00</li>
+                        <li>19:30</li>
+                        <li>20:00</li>
+                        <li>20:30</li>
                     </ul>
                 </div>
             </div>
@@ -115,12 +117,12 @@
             <div class="status-des-outer">
                 <span>
                     <div style="background: #7BD460" class="co"></div>
-                    <div>已预订已审批</div>
+                    <div>已预订</div>
                 </span>
-                <span>
+                <!-- <span>
                     <div style="background: #FFD119" class="co"></div>
                     <div>已预订已审批</div>
-                </span> 
+                </span>  -->
                 <span>
                     <div style="background: #CCC" class="co"></div>
                     <div>未预订</div>
@@ -132,5 +134,75 @@
             </div>
         </div>
     </div>
+    <script src='./lib/tools.js'></script>
+    <script>
+            $(function() {
+                var Page = {
+                    const: {
+                        pageParams: {
+                            officeSite: '',
+                            officeCode: '',
+                            date: ''
+                        }
+                    },
+                    init: function() {
+                        
+                        document.title = '504会议室'
+                        var _serach = Tools.getSearch()
+                        Page.const.pageParams.date = Tools.dateFormat(new Date('2019-06-28'), 'yyyy-MM-dd')
+                        Page.const.pageParams.officeSite = _serach.officeSite
+                        Page.const.pageParams.officeCode = _serach.officeCode
+                        this.getData()
+                        console.log(Tools.getSearch());
+                        console.log(Page.const.pageParams);
+                                               
+                    },
+                    getData: function() {
+                        Tools.request({
+                            url: Tools.constant.apiOfficeDetail,
+                            type: 'GET',
+                            data: Page.const.pageParams
+                        }, function(msg) {
+                            function getDistance(beginTime, endTime) {
+                                var _date = '2019/06/28 '
+                                var _disStart = new Date(_date + beginTime).getTime() - new Date(_date + '08:00').getTime()
+                                var _disEnd = new Date(_date + endTime).getTime() - new Date(_date + '08:00').getTime()
+                                return [_disStart/60/1000, _disEnd/60/1000]
+                            }
+                            var _actualInfoList = [
+                                { beginTime: '08:00', endTime: '08:00' },
+                                { beginTime: '08:36', endTime: '08:40' },
+                                { beginTime: '09:52', endTime: '10:10' }
+                            ]
+
+                            _actualInfoList.forEach(function(val) {
+                                val.timeArr = getDistance(val.beginTime, val.endTime)
+                            })
+                            console.log(_actualInfoList);
+                            var _str = ''
+                            for (var index = 0; index < 720; index++) {
+                                var _flag = false
+                                for (var i = 0, len = _actualInfoList.length; i < len; i++) {
+                                    var _timeArr = _actualInfoList[i].timeArr
+                                    if (_timeArr[0]<=index && index <=_timeArr[1]) {
+                                        _flag = true
+                                        break
+                                    }
+                                }
+                                
+                                if (_flag) {
+                                    _str += '<li class="on"></li>'
+                                } else {
+                                    _str += '<li class="off"></li>'
+                                }
+                            }
+                            $('.x-1 ul').html(_str)
+                            console.log(_actualInfoList);
+                        })
+                    }
+                }
+                Page.init()
+            })
+        </script>
 </body>
 </html>

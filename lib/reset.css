@@ -66,3 +66,27 @@ body, div, span, header, footer, nav, section, aside, article, ul, li, a, p, h1,
   scrollbar-base-color:#fff;
   scrollbar-track-color:#fff;
   }
+
+  .PB-toast-outbox {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background: rgba(0,0,0,0);
+    z-index: 9999;
+  }
+
+  .PB-toast-content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.5);
+    min-width: .2rem;
+    max-width: 60%;
+    border-radius: .08rem;
+    line-height: 1.4;
+    color: #FFF;
+    padding: .12rem .16rem;
+  }
