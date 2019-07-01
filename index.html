@@ -73,9 +73,9 @@
             <div class="um-inner">
                 <div class="um-title">请输入UM账号</div>
                 <input id="um-input" type="text" placeholder="请输入UM">
-                <div class="um-tip">正在锁定的会议室:总 _银行</div>
+                <div class="um-tip">正在锁定：总行（504）</div>
                 <div class="um-btn">
-                    <span id="um-btn-sure">确认锁定</span>
+                    <span id="um-btn-sure">锁定</span>
                     <span id="um-btn-cancel">取消</span>
                 </div>
             </div>
@@ -88,7 +88,8 @@
                 <div class="people-outer-stop">
                     <div class="people-outer pop-in-same">
                         <ul class="pop-same-ul" id="people-outer-ul">
-                            <li data-type="A" class="active">1-10人</li>
+                            <li data-type="" class="active">1-10人</li>
+                            <li data-type="A">1-10人</li>
                             <li data-type="B">10-20人</li>
                             <li data-type="C">20-30人</li>
                             <li data-type="D">30-40人</li>
@@ -123,29 +124,43 @@
                 const: {
                     pageParams: {
                         officeSite: 'SYDS', // 职场: 保税区：BSQ；陆家嘴：LJZ；深业大厦：SYDS
-                        isVideo: 'Y', // 视频会议： 是：Y；否：N
-                        officeStatus: '0', // 会议室状态: 忙：1；闲：0
-                        scale: 'A' // A：1-10人；B：10-20人；C：20-30人；D：30-40人；E：40-50人；F：50人以上
+                        // isVideo: 'Y', // 视频会议： 是：Y；否：N
+                        // officeStatus: '0', // 会议室状态: 忙：1；闲：0
+                        // scale: '' // A：1-10人；B：10-20人；C：20-30人；D：30-40人；E：40-50人；F：50人以上
+                    },
+                    locakParams: {
+                        officeSite: 'SYDS',
+                        officeCode: '2302',
+                        umCode: 'liu201',
+                        opType: 'N'
                     }
                 },
                 init: function() {
-                    Tools.toast('视频会议')
+                    // Tools.toast('视频会议')
                     setTimeout(function(){
-                        Tools.toast('446')
+                        // Tools.toast('446')
                     }, 900)
                     console.log(Page.const.pageParams);
                     this.bindEvent()
                     this.getData()
+                    
+                },
+                lockA: function() {
+                    Tools.request({
+                        url: Tools.constant.handleLockOffices,
+                        type: 'POST',
+                        data:Page.const.locakParams
+                    }, function(msg) {
+                        console.log(msg);
+                    })
                 },
                 getData: function() {
                     Tools.request({
-                        url: Tools.constant.apiOfficeDetail,
+                        url: Tools.constant.listOffices,
                         type: 'GET',
-                        data: {
-                            officeSite: 'SYDS',
-                            officeCode: '2303',
-                            date: '2019-06-28'
-                        }
+                        data:Page.const.pageParams
+                    }, function(msg) {
+                        console.log(msg);
                     })
                 },
                 bindEvent: function() {
@@ -225,12 +240,17 @@
                         console.log(_type)
                     })
                     $('#index-of-ul-id').on('click', 'li .of-btn', function(event) {
+                        localStorage.setItem('ka', 12356)
+                        
                         if (!$(this).hasClass('of-btn-disable')) {
                             $('.um-outer').fadeIn()
                         }
                         event.stopPropagation();
                     })
                     $('#um-btn-sure').on('click', function(event) {
+                        $('.um-outer').fadeOut()
+                        Page.lockA()
+                        Tools.toast('锁定成功，5分钟有效')
                         var _value = $('#um-input').val()
                         event.stopPropagation()
                     })
