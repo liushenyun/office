@@ -41,6 +41,7 @@
                 <!-- <li data-office='503'>
                     <div class="of-no">
                         <span>504</span>
+                        <img src="./lib/img/up.png">
                         <span>5人</span>
                     </div>
                     <div class="of-order is-ordered">
@@ -126,7 +127,7 @@
                     pageParams: {
                         officeSite: 'SYDS', // 职场: 保税区：BSQ；陆家嘴：LJZ；深业大厦：SYDS
                         isVideo: 'Y', // 视频会议： 是：Y；否：N
-                        officeStatus: '1', // 会议室状态: 忙：1；闲：0
+                        officeStatus: '0', // 会议室状态: 忙：1；闲：0
                         scale: 'all' // A：1-10人；B：10-20人；C：20-30人；D：30-40人；E：40-50人；F：50人以上
                     },
                     locakParams: {
@@ -145,7 +146,9 @@
                 init: function() {
                     this.bindEvent()
                     this.getData()
-                    
+                    setInterval(function() {
+                        Page.getData()
+                    }, 10000)
                 },
                 lockA: function() {
                     var _officeSite = Page.const.pageParams.officeSite
@@ -217,11 +220,21 @@
                         var _btnClass = ''
                         var _ofWordClass = 'is-ordered'
                         var _opType = ''
+                        var _officeStatus = val.officeStatus
+                        var _isVideo = val.isVideo
+                        var _isVideoClass = ''
 
+                        if (_isVideo == 'Y') {
+                            _isVideoClass = 'hasVideo'
+                        }
                         if (index==1) {
                             _ofWordClass = ''
                         }
-                        if (_lockStatus == 'Y' && _OFFICE_UMCODE == _umCode) {
+                        if (_officeStatus == 1) {
+                            _btnClass = 'of-btn-disable'
+                            _btnWord = '有人'
+                            _opType = ''
+                        } else if (_lockStatus == 'Y' && _OFFICE_UMCODE == _umCode) {
                             _btnClass = ''
                             _btnWord = '取消锁定'
                             _opType = 'N'
@@ -236,8 +249,9 @@
                         }
                         _str +=
                         '<li data-office='+_officeCode+'>'+
-                            '<div class="of-no">'+
+                            '<div class="of-no '+_isVideoClass+'">'+
                                 '<span>'+_officeCode+'</span>'+
+                                '<img src="./lib/img/video.png">'+
                                 '<span>'+_officesCapacity+'人</span>'+
                             '</div>'+
                             '<div class="of-order '+ _ofWordClass +'">'+

@@ -97,9 +97,19 @@
     justify-content: space-between;
     margin-bottom: .23rem;
 }
+.of-no.hasVideo img{
+    display: block
+}
+.of-no img {
+    width: .32rem;
+    height: .34rem;
+    display: none;
+    margin-right: .12rem;
+}
 .of-no span:nth-of-type(1) {
     font-size: .44rem;
     font-weight:600;
+    flex: 1;
 }
 .of-no span:nth-of-type(1) {
     font-size: .32rem;
