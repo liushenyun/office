@@ -38,6 +38,8 @@
 .index-status-ul li {
     width: 33%;
     text-align: center;
+    height: .6rem;
+    line-height: .6rem;
 }
 .index-status-ul li.active {
     color: #34A1FC;
@@ -48,6 +50,7 @@
 }
 .index-status-ul li span {
     display: inline-block;
+    height: 100%;
     padding-right: .38rem;
     background: url('./img/down.png') no-repeat right center;
     background-size: .26rem .26rem;
@@ -67,6 +70,7 @@
     background: #FFF;
     float: left;
     margin-bottom: .24rem;
+    border-radius: .1rem;
 }
 .index-of-ul li:nth-child(odd) {
     margin-right: 2%;
@@ -240,8 +244,15 @@
     border-top: 1px solid #D1D1D1;
 }
 
+.um-btn span {
+    width: 40%;
+    height: .98rem;
+    line-height: .98rem;
+    display: inline-block;
+    text-align: center;
+}
+
 .um-btn span:nth-of-type(2) {
-    margin-left: .8rem;
     color: #999;
 }
 .index-search-btn {
@@ -249,8 +260,10 @@
     line-height: .6rem;
     text-align: center;
     color: #34A1FC;
-    background: rgba(52,161,252,0.2);
-    width: 60%;
-    margin-left: 20%;
+    /* background: rgba(52,161,252,0.2); */
+    width: 40%;
+    margin-left: 30%;
     margin-top: .3rem;
+    border: 1px solid #34A1FC;
+    border-radius: .1rem;
 }
