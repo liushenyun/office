@@ -71,6 +71,19 @@
 .index-of-ul li:nth-child(odd) {
     margin-right: 2%;
 }
+.index-no-data .no-data-tip {
+    display: block;
+}
+.index-no-data .index-of-ul {
+    display: none;
+}
+.no-data-tip {
+    line-height: .8rem;
+    height: .8rem;
+    text-align: center;
+    color: #999;
+    display: none;
+}
 
 .of-no {
     height: .62rem;
@@ -90,6 +103,14 @@
 .of-order {
     font-size: .24rem;
     color: #666;
+    min-height: .7rem;
+}
+.of-order.is-ordered .ordered-tip,
+.of-order.is-ordered .ordered-name{
+    display: block
+}
+.of-order.is-ordered .order-active {
+    display: none;
 }
 
 .of-order .ordered-name {
@@ -97,6 +118,9 @@
 }
 .of-order .order-active {
     color: #34A1FC;
+}
+.of-order .ordered-tip,
+.of-order .ordered-name{
     display: none;
 }
 .of-order .order-active,

@@ -38,12 +38,12 @@
         
         <div class="index-of-outer">
             <ul class="index-of-ul" id="index-of-ul-id">
-                <li data-office='503'>
+                <!-- <li data-office='503'>
                     <div class="of-no">
                         <span>504</span>
                         <span>5人</span>
                     </div>
-                    <div class="of-order">
+                    <div class="of-order is-ordered">
                         <div class="order-active">立即预定</div>
                         <div class="ordered-tip">已经预定</div>
                         <div class="ordered-name">崔永斌：18823668888</div>
@@ -65,15 +65,16 @@
                     <div class="of-btn of-btn-disable">
                         已锁定
                     </div>
-                </li>
+                </li> -->
             </ul>
+            <div class="no-data-tip">暂无数据</div>
         </div>
 
         <div class="um-outer">
             <div class="um-inner">
                 <div class="um-title">请输入UM账号</div>
                 <input id="um-input" type="text" placeholder="请输入UM">
-                <div class="um-tip">正在锁定：总行（504）</div>
+                <div class="um-tip">正在锁定：<span id="lock-build-name">总行</span>（<span id="lock-office-lock">504</span>）</div>
                 <div class="um-btn">
                     <span id="um-btn-sure">锁定</span>
                     <span id="um-btn-cancel">取消</span>
@@ -88,7 +89,7 @@
                 <div class="people-outer-stop">
                     <div class="people-outer pop-in-same">
                         <ul class="pop-same-ul" id="people-outer-ul">
-                            <li data-type="" class="active">1-10人</li>
+                            <li data-type="all" class="active">全部</li>
                             <li data-type="A">1-10人</li>
                             <li data-type="B">10-20人</li>
                             <li data-type="C">20-30人</li>
@@ -124,15 +125,21 @@
                 const: {
                     pageParams: {
                         officeSite: 'SYDS', // 职场: 保税区：BSQ；陆家嘴：LJZ；深业大厦：SYDS
-                        // isVideo: 'Y', // 视频会议： 是：Y；否：N
-                        // officeStatus: '0', // 会议室状态: 忙：1；闲：0
-                        // scale: '' // A：1-10人；B：10-20人；C：20-30人；D：30-40人；E：40-50人；F：50人以上
+                        isVideo: 'Y', // 视频会议： 是：Y；否：N
+                        officeStatus: '1', // 会议室状态: 忙：1；闲：0
+                        scale: 'all' // A：1-10人；B：10-20人；C：20-30人；D：30-40人；E：40-50人；F：50人以上
                     },
                     locakParams: {
-                        officeSite: 'SYDS',
+                        // officeSite: 'SYDS',
                         officeCode: '2302',
                         umCode: 'liu201',
                         opType: 'N'
+                    },
+                    buildName: {
+                        ZY: '总行',
+                        SYDS: '深业大厦',
+                        BSQ: '保税区',
+                        LJZ: '陆家嘴'
                     }
                 },
                 init: function() {
@@ -146,31 +153,120 @@
                     
                 },
                 lockA: function() {
+                    var _officeSite = Page.const.pageParams.officeSite
+                    var _officeCode = Page.const.locakParams.officeCode
+                    var _umCode = Page.const.locakParams.umCode
+                    var _opType = Page.const.locakParams.opType
+                    var _params = {}
+                    _params.officeSite = _officeSite
+                    _params.officeCode = _officeCode
+                    _params.opType = _opType
+                    if (_umCode) {
+                        _params.umCode = _umCode
+                    }
                     Tools.request({
                         url: Tools.constant.handleLockOffices,
                         type: 'POST',
-                        data:Page.const.locakParams
+                        data: _params
                     }, function(msg) {
-                        console.log(msg);
+                        localStorage.setItem('OFFICE-UMCODE', _umCode)
+                        $('.um-outer').fadeOut()
+                        if (_opType == 'N') {
+                            Tools.toast('已取消锁定')
+                        } else {
+                            Tools.toast('锁定成功，5分钟有效')
+                        }
+                        setTimeout(function() {
+                            Page.getData()
+                        }, 800)
                     })
                 },
                 getData: function() {
+                    var _params = {}
+                    var _listOffices = Page.const.pageParams
+                    _params.officeSite = _listOffices.officeSite
+                    // _params.isVideo = _listOffices.isVideo
+                    // _params.officeStatus = _listOffices.officeStatus
+                    if (_listOffices.scale != 'all') {
+                        _params.scale = _listOffices.scale
+                    }
+                   
+
                     Tools.request({
                         url: Tools.constant.listOffices,
                         type: 'GET',
-                        data:Page.const.pageParams
+                        data: _params
                     }, function(msg) {
+                        if (msg.status == 'success') {
+                            Page.dealData(msg.data)
+                        } else {
+
+                        }
                         console.log(msg);
                     })
+                },
+                dealData: function(data) {
+                    var _data = data
+                    if (_data.length < 1) {
+                        $('.index-of-outer').addClass('index-no-data')
+                        return
+                    }
+                    $('.index-of-outer').removeClass('index-no-data')
+                    var _str = ''
+                    var _OFFICE_UMCODE = localStorage.getItem('OFFICE-UMCODE')
+                    _data.forEach((val, index) => {
+                        var _officeCode = val.officeCode
+                        var _lockStatus = val.lockStatus
+                        var _officesCapacity = val.officesCapacity
+                        var _umCode = val.umCode
+                        var _btnWord = ''
+                        var _btnClass = ''
+                        var _ofWordClass = 'is-ordered'
+                        var _opType = ''
+
+                        if (index==1) {
+                            _ofWordClass = ''
+                        }
+                        if (_lockStatus == 'Y' && _OFFICE_UMCODE == _umCode) {
+                            _btnClass = ''
+                            _btnWord = '取消锁定'
+                            _opType = 'N'
+                        } else if (_lockStatus == 'N') {
+                            _btnClass = ''
+                            _btnWord = '锁定'
+                            _opType = 'Y'
+                        } else {
+                            _btnClass = 'of-btn-disable'
+                            _btnWord = '已锁定'
+                            _opType = ''
+                        }
+                        _str +=
+                        '<li data-office='+_officeCode+'>'+
+                            '<div class="of-no">'+
+                                '<span>'+_officeCode+'</span>'+
+                                '<span>'+_officesCapacity+'人</span>'+
+                            '</div>'+
+                            '<div class="of-order '+ _ofWordClass +'">'+
+                                '<div class="order-active">立即预定</div>'+
+                                '<div class="ordered-tip">已经预定</div>'+
+                                '<div class="ordered-name">崔永斌：18823668888</div>'+
+                            '</div>'+
+                            '<div data-opType='+_opType+' data-office='+_officeCode+' class="of-btn '+_btnClass+'">'+
+                                _btnWord+
+                            '</div>'+
+                        '</li>'
+                    })
+                    $('#index-of-ul-id').html(_str)
+
                 },
                 bindEvent: function() {
                     $('#index-build-ul-id').on('click', 'li', function(event) {
                         var _this = $(this)
                         if (!_this.hasClass('actice')) {
                             var _type = _this.data('type')
-                            console.log(_type);
                             Page.const.pageParams.officeSite = _type
                             _this.addClass('active').siblings().removeClass('active')
+                            Page.getData()
                         }
                     })
                     $('#index-status-ul-id').on('click', 'li', function(event) {
@@ -229,29 +325,38 @@
                         $(this).fadeOut()
                     })
                     $('.index-search-btn').on('click', function() {
-                        console.log(Page.const.pageParams)
-                        setTimeout(function() {
-                            $('#index-pop-outer-id').fadeOut()
-                        }, 1000)
+                        $('#index-pop-outer-id').fadeOut()
+                        Page.getData()
                     })
                     $('#index-of-ul-id').on('click', 'li', function() {
-                        var _type = $(this).data('office')
-                        location.href ='./office.html?officeSite=SYDS&officeCode=2303'
-                        console.log(_type)
+                        var _officeCode = $(this).data('office')
+                        var _officeSite = Page.const.pageParams.officeSite
+                        location.href ='./office.html?officeSite='+ _officeSite +'&officeCode='+ _officeCode
                     })
                     $('#index-of-ul-id').on('click', 'li .of-btn', function(event) {
-                        localStorage.setItem('ka', 12356)
-                        
                         if (!$(this).hasClass('of-btn-disable')) {
-                            $('.um-outer').fadeIn()
+                            var _office = $(this).data('office')
+                            var _optype = $(this).data('optype')
+                            if (_optype == 'N') {
+                                Page.const.locakParams.officeCode = _office
+                                Page.const.locakParams.opType = 'N'
+                                Page.const.locakParams.umCode = ''
+                                Page.lockA()
+                            } else {
+                                Page.const.locakParams.officeCode = _office
+                                Page.const.locakParams.opType = 'Y'
+                                $('#lock-build-name').text(Page.const.buildName[Page.const.pageParams.officeSite])
+                                $('#lock-office-lock').text(_office)
+                                $('.um-outer').fadeIn()
+                            }
                         }
                         event.stopPropagation();
                     })
                     $('#um-btn-sure').on('click', function(event) {
-                        $('.um-outer').fadeOut()
-                        Page.lockA()
-                        Tools.toast('锁定成功，5分钟有效')
                         var _value = $('#um-input').val()
+                        Page.const.locakParams.umCode = _value
+                        console.log(_value);
+                        Page.lockA()
                         event.stopPropagation()
                     })
                     $('#um-btn-cancel').on('click', function(event) {

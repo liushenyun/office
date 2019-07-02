@@ -149,13 +149,10 @@
                         
                         document.title = '504会议室'
                         var _serach = Tools.getSearch()
-                        Page.const.pageParams.date = Tools.dateFormat(new Date('2019-06-28'), 'yyyy-MM-dd')
+                        Page.const.pageParams.date = Tools.dateFormat(new Date(), 'yyyy-MM-dd')
                         Page.const.pageParams.officeSite = _serach.officeSite
                         Page.const.pageParams.officeCode = _serach.officeCode
                         this.getData()
-                        console.log(Tools.getSearch());
-                        console.log(Page.const.pageParams);
-                                               
                     },
                     getData: function() {
                         Tools.request({
@@ -163,26 +160,35 @@
                             type: 'GET',
                             data: Page.const.pageParams
                         }, function(msg) {
+                            console.log(msg);
+                            if (msg.status != "success") {
+                                return
+                            }
+                            var _actualInfoList = msg.data.actualInfoList || []
+                            
                             function getDistance(beginTime, endTime) {
                                 var _date = '2019/06/28 '
                                 var _disStart = new Date(_date + beginTime).getTime() - new Date(_date + '08:00').getTime()
                                 var _disEnd = new Date(_date + endTime).getTime() - new Date(_date + '08:00').getTime()
                                 return [_disStart/60/1000, _disEnd/60/1000]
                             }
-                            var _actualInfoList = [
-                                { beginTime: '08:00', endTime: '08:00' },
-                                { beginTime: '08:36', endTime: '08:40' },
-                                { beginTime: '09:52', endTime: '10:10' }
-                            ]
+                            // var _actualInfoList = [
+                            //     { beginTime: '08:00', endTime: '08:00' },
+                            //     { beginTime: '08:36', endTime: '08:40' },
+                            //     { beginTime: '09:52', endTime: '10:10' }
+                            // ]
 
                             _actualInfoList.forEach(function(val) {
-                                val.timeArr = getDistance(val.beginTime, val.endTime)
+                                if (val && val.beginTime) {
+                                    val.timeArr = getDistance(val.beginTime, val.endTime)
+                                }
                             })
                             console.log(_actualInfoList);
                             var _str = ''
                             for (var index = 0; index < 720; index++) {
                                 var _flag = false
                                 for (var i = 0, len = _actualInfoList.length; i < len; i++) {
+                                    console.log(_actualInfoList[i])
                                     var _timeArr = _actualInfoList[i].timeArr
                                     if (_timeArr[0]<=index && index <=_timeArr[1]) {
                                         _flag = true
@@ -197,7 +203,6 @@
                                 }
                             }
                             $('.x-1 ul').html(_str)
-                            console.log(_actualInfoList);
                         })
                     }
                 }
