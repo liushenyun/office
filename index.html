@@ -102,14 +102,16 @@
 
                     <div class="status-outer pop-in-same">
                         <ul class="pop-same-ul" id="status-outer-ul">
-                            <li data-type='0' class="active">闲</li>
+                            <!-- <li data-type='0' class="active">闲</li> -->
+                            <li data-type='0'>闲</li>
                             <li data-type='1'>忙</li>
                         </ul>
                     </div>
 
                     <div class="tv-outer pop-in-same">
                         <ul class="pop-same-ul" id="tv-outer-ul">
-                            <li data-type='Y' class="active">是</li>
+                            <!-- <li data-type='Y' class="active">是</li> -->
+                            <li data-type='Y'>是</li>
                             <li data-type='N'>否</li>
                         </ul>
                     </div>
@@ -126,8 +128,8 @@
                 const: {
                     pageParams: {
                         officeSite: 'SYDS', // 职场: 保税区：BSQ；陆家嘴：LJZ；深业大厦：SYDS
-                        isVideo: 'Y', // 视频会议： 是：Y；否：N
-                        officeStatus: '0', // 会议室状态: 忙：1；闲：0
+                        isVideo: 'all', // 视频会议： 是：Y；否：N
+                        officeStatus: 'all', // 会议室状态: 忙：1；闲：0
                         scale: 'all' // A：1-10人；B：10-20人；C：20-30人；D：30-40人；E：40-50人；F：50人以上
                     },
                     locakParams: {
@@ -185,10 +187,15 @@
                     var _params = {}
                     var _listOffices = Page.const.pageParams
                     _params.officeSite = _listOffices.officeSite
-                    _params.isVideo = _listOffices.isVideo
-                    _params.officeStatus = _listOffices.officeStatus
+                    // _params.isVideo = _listOffices.isVideo
+                    // _params.officeStatus = _listOffices.officeStatus
                     if (_listOffices.scale != 'all') {
                         _params.scale = _listOffices.scale
+                    }
+                    if (_listOffices.isVideo != 'all') {
+                        _params.isVideo = _listOffices.isVideo
+                    }if (_listOffices.officeStatus != 'all') {
+                        _params.officeStatus = _listOffices.officeStatus
                     }
                     Tools.request({
                         url: Tools.constant.listOffices,
@@ -307,19 +314,27 @@
 
                     $('#status-outer-ul').on('click', 'li', function() {
                         var _this = $(this)
-                        if (!_this.hasClass('actice')) {
+                        console.log(212, _this.hasClass('active'));
+                        
+                        if (!_this.hasClass('active')) {
                             var _type = _this.data('type')
                             Page.const.pageParams.officeStatus = _type
                             _this.addClass('active').siblings().removeClass('active')
+                        } else {
+                            _this.removeClass('active')
+                            Page.const.pageParams.officeStatus = 'all'
                         }
                     })
 
                     $('#tv-outer-ul').on('click', 'li', function() {
                         var _this = $(this)
-                        if (!_this.hasClass('actice')) {
+                        if (!_this.hasClass('active')) {
                             var _type = _this.data('type')
                             Page.const.pageParams.isVideo = _type
                             _this.addClass('active').siblings().removeClass('active')
+                        } else {
+                            _this.removeClass('active')
+                            Page.const.pageParams.isVideo = 'all'
                         }
                     })
                     $('.index-pop-con').on('click', function(event) {

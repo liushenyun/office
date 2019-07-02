@@ -51,6 +51,7 @@
 }
 .x-1 ul li {
     flex: 1;
+    position: relative;
 }
 .x-1 ul li.on {
     background: #34A1FC
@@ -112,4 +113,43 @@
 }
 .status-des-outer span:last-of-type {
     margin-right: 0;
+}
+
+.tag{
+    display: inline-block;
+    min-width:.3rem;
+    padding: 0 .1rem;
+    height:.4rem;
+    line-height: .4rem;
+    box-sizing: border-box;
+    border:1px solid #09F;
+    position:absolute;
+    background-color:#FFF;
+    border-radius: .08rem;
+    top: -.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.arrow{
+    position:absolute;
+    width: .2rem;
+    height: .2rem;
+    bottom:-0.2rem;
+    left: 50%;
+    transform: translateX(-50%)
+}
+.arrow *{
+    display:block;
+    border-width: .1rem;
+    position:absolute;
+    border-style:solid dashed dashed dashed;
+    font-size:0;
+    line-height:0;
+}
+.arrow em{
+    border-color:#09F transparent transparent;
+}
+.arrow span{
+    border-color:#FFF transparent transparent;
+    top:-0.03rem;
 }

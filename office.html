@@ -74,14 +74,14 @@
                         <li>16:00</li>
                         <li>16:30</li>
                         <li>17:00</li>
+                        <li>17:30</li>
+                        <li>18:00</li>
                         <li>18:30</li>
                         <li>19:00</li>
                         <li>19:30</li>
-                        <li>20:00</li>
-                        <li>20:30</li>
                     </ul>
                     <div class="status-x x-1">
-                        <ul>
+                        <ul id="time-ul-id">
                            
                         </ul>
                     </div>
@@ -105,14 +105,15 @@
                         <li>16:00</li>
                         <li>16:30</li>
                         <li>17:00</li>
+                        <li>17:30</li>
+                        <li>18:00</li>
                         <li>18:30</li>
                         <li>19:00</li>
                         <li>19:30</li>
-                        <li>20:00</li>
-                        <li>20:30</li>
                     </ul>
                 </div>
             </div>
+           
 
             <div class="status-des-outer">
                 <span>
@@ -152,6 +153,18 @@
                         Page.const.pageParams.officeCode = _serach.officeCode
                         document.title = _serach.officeCode + '会议室'
                         this.getData()
+                        // this.bindEvent()
+                    },
+                    bindEvent: function() {
+                        $('#time-ul-id').on('click', 'li', function(event) {
+                            var _str = '<div class="tag">'+
+                                            '<div class="arrow">'+
+                                                '<em></em><span></span>'+
+                                            '</div>'+
+                                            '06:30'+
+                                        '</div>'
+                            $(this).html(_str)
+                        })
                     },
                     getData: function() {
                         Tools.request({
@@ -159,14 +172,14 @@
                             type: 'GET',
                             data: Page.const.pageParams
                         }, function(msg) {
-                            console.log(msg);
                             if (msg.status != "success") {
                                 return
                             }
                             var _actualInfoList = msg.data.actualInfoList || []
                             function getDistance(beginTime, endTime) {
+                                beginTime = beginTime.replace(/-/g, '/')
+                                endTime = endTime.replace(/-/g, '/')
                                 var _date = Tools.dateFormat(new Date(beginTime), 'yyyy-MM-dd')
-                                console.log(beginTime, endTime, _date)
                                 var _disStart = new Date(beginTime).getTime() - new Date(_date + ' 08:00').getTime()
                                 var _disEnd = new Date(endTime).getTime() - new Date(_date + ' 08:00').getTime()
                                 return [_disStart/60/1000, _disEnd/60/1000]
@@ -185,6 +198,7 @@
                             var _str = ''
                             for (var index = 0; index < 720; index++) {
                                 var _flag = false
+                                var _time = ''
                                 for (var i = 0, len = _actualInfoList.length; i < len; i++) {
                                     if (_actualInfoList[i] && _actualInfoList[i].timeArr) {
                                         var _timeArr = _actualInfoList[i].timeArr
