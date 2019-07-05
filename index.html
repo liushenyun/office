@@ -23,7 +23,7 @@
         <div class="index-top-outer">
             <ul class="index-build-ul" id="index-build-ul-id">
                 <li data-type="ZH">总行</li>
-                <li data-type="SYDS" class="active">深业大厦</li>
+                <li data-type="SYDS">深业大厦</li>
                 <li data-type="BSQ">保税区</li>
                 <li data-type="LJZ">陆家嘴</li>
             </ul>
@@ -47,7 +47,7 @@
                     <div class="of-order is-ordered">
                         <div class="order-active">立即预定</div>
                         <div class="ordered-tip">已经预定</div>
-                        <div class="ordered-name">崔永斌：18823668888</div>
+                        <div class="ordered-name">李明：18823668888</div>
                     </div>
                     <div class="of-btn">
                         锁定
@@ -92,10 +92,10 @@
                         <ul class="pop-same-ul" id="people-outer-ul">
                             <li data-type="all" class="active">全部</li>
                             <li data-type="A">1-10人</li>
-                            <li data-type="B">10-20人</li>
-                            <li data-type="C">20-30人</li>
-                            <li data-type="D">30-40人</li>
-                            <li data-type="E">40-50人</li>
+                            <li data-type="B">11-20人</li>
+                            <li data-type="C">21-30人</li>
+                            <li data-type="D">31-40人</li>
+                            <li data-type="E">41-50人</li>
                             <li data-type="F">50人以上</li>
                         </ul>
                     </div>
@@ -127,7 +127,7 @@
             var Page = {
                 const: {
                     pageParams: {
-                        officeSite: 'SYDS', // 职场: 保税区：BSQ；陆家嘴：LJZ；深业大厦：SYDS
+                        officeSite: localStorage.getItem('OFFICE_TYPE') || 'ZH', // 职场: 保税区：BSQ；陆家嘴：LJZ；深业大厦：SYDS
                         isVideo: 'all', // 视频会议： 是：Y；否：N
                         officeStatus: 'all', // 会议室状态: 忙：1；闲：0
                         scale: 'all' // A：1-10人；B：10-20人；C：20-30人；D：30-40人；E：40-50人；F：50人以上
@@ -148,9 +148,15 @@
                 init: function() {
                     this.bindEvent()
                     this.getData()
+                    var _O_type = Page.const.pageParams.officeSite
+                    $('#index-build-ul-id li').each(function() {
+                        if ($(this).data('type') == _O_type) {
+                            $(this).addClass('active')
+                        }
+                    })
                     setInterval(function() {
                         Page.getData()
-                    }, 10000)
+                    }, 5000)
                 },
                 lockA: function() {
                     var _officeSite = Page.const.pageParams.officeSite
@@ -254,6 +260,12 @@
                             _btnWord = '已锁定'
                             _opType = ''
                         }
+                        var _nameS = ''
+                        if (_officeCode == '6楼多功能会议室') {
+                            _nameS = '崔永斌：13823762237'
+                        } else {
+                            _nameS = '许海金：13868688888'
+                        }
                         _str +=
                         '<li data-office='+_officeCode+'>'+
                             '<div class="of-no '+_isVideoClass+'">'+
@@ -264,7 +276,7 @@
                             '<div class="of-order '+ _ofWordClass +'">'+
                                 '<div class="order-active">立即预定</div>'+
                                 '<div class="ordered-tip">已经预定</div>'+
-                                '<div class="ordered-name">崔永斌：18823668888</div>'+
+                                '<div class="ordered-name">'+_nameS+'</div>'+
                             '</div>'+
                             '<div data-opType='+_opType+' data-office='+_officeCode+' class="of-btn '+_btnClass+'">'+
                                 _btnWord+
@@ -277,17 +289,18 @@
                 bindEvent: function() {
                     $('#index-build-ul-id').on('click', 'li', function(event) {
                         var _this = $(this)
-                        if (!_this.hasClass('actice')) {
+                        if (!_this.hasClass('active')) {
                             var _type = _this.data('type')
                             Page.const.pageParams.officeSite = _type
                             _this.addClass('active').siblings().removeClass('active')
+                            localStorage.setItem('OFFICE_TYPE', _type)
                             Page.getData()
                         }
                     })
                     $('#index-status-ul-id').on('click', 'li', function(event) {
                         var _this = $(this)
                         $('#index-pop-outer-id').fadeIn();
-                        if (!_this.hasClass('actice')) {
+                        if (!_this.hasClass('active')) {
                             var _type = _this.data('type')
                             _this.addClass('active').siblings().removeClass('active')
                             if (_type == 0) {
@@ -305,7 +318,7 @@
 
                     $('#people-outer-ul').on('click', 'li', function() {
                         var _this = $(this)
-                        if (!_this.hasClass('actice')) {
+                        if (!_this.hasClass('active')) {
                             var _type = _this.data('type')
                             Page.const.pageParams.scale = _type
                             _this.addClass('active').siblings().removeClass('active')
@@ -314,8 +327,6 @@
 
                     $('#status-outer-ul').on('click', 'li', function() {
                         var _this = $(this)
-                        console.log(212, _this.hasClass('active'));
-                        
                         if (!_this.hasClass('active')) {
                             var _type = _this.data('type')
                             Page.const.pageParams.officeStatus = _type
@@ -341,10 +352,12 @@
                         event.stopPropagation();
                     })
                     $('#index-pop-outer-id').on('click', function(event) {
+                        $('#index-status-ul-id').find('.active').removeClass('active')
                         $(this).fadeOut()
                     })
                     $('.index-search-btn').on('click', function() {
                         $('#index-pop-outer-id').fadeOut()
+                        $('#index-status-ul-id').find('.active').removeClass('active')
                         Page.getData()
                     })
                     $('#index-of-ul-id').on('click', 'li', function() {

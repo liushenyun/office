@@ -6,7 +6,7 @@
     <meta content="yes" name="apple-mobile-web-app-capable"> 
     <meta content="yes" name="apple-touch-fullscreen"> 
     <meta content="telephone=no,email=no" name="format-detection"> 
-    <title>503会议室</title>
+    <title>会议室</title>
     <link rel="stylesheet" href="./lib/reset.css">
     <link rel="stylesheet" href="./lib/office.css">
     <script src="./lib/jquery-3.4.1.min.js"></script>
@@ -153,17 +153,28 @@
                         Page.const.pageParams.officeCode = _serach.officeCode
                         document.title = _serach.officeCode + '会议室'
                         this.getData()
-                        // this.bindEvent()
+                        this.bindEvent()
+                        setInterval(function() {
+                            Page.getData()
+                        }, 10000)
                     },
                     bindEvent: function() {
                         $('#time-ul-id').on('click', 'li', function(event) {
-                            var _str = '<div class="tag">'+
+                            event.stopPropagation();
+                            if ($(this).hasClass('on')) {
+                                var _time = $(this).data('time')
+                                var _str = '<div class="tag">'+
                                             '<div class="arrow">'+
                                                 '<em></em><span></span>'+
-                                            '</div>'+
-                                            '06:30'+
+                                            '</div>'+ _time +
                                         '</div>'
-                            $(this).html(_str)
+                                $(this).html(_str).siblings().html('')
+                            }
+                        })
+                        $('.office-container').on('click', function() {
+                            $('#time-ul-id li').each(function() {
+                                $(this).html('')
+                            })
                         })
                     },
                     getData: function() {
@@ -179,7 +190,7 @@
                             function getDistance(beginTime, endTime) {
                                 beginTime = beginTime.replace(/-/g, '/')
                                 endTime = endTime.replace(/-/g, '/')
-                                var _date = Tools.dateFormat(new Date(beginTime), 'yyyy-MM-dd')
+                                var _date = Tools.dateFormat(new Date(beginTime), 'yyyy/MM/dd')
                                 var _disStart = new Date(beginTime).getTime() - new Date(_date + ' 08:00').getTime()
                                 var _disEnd = new Date(endTime).getTime() - new Date(_date + ' 08:00').getTime()
                                 return [_disStart/60/1000, _disEnd/60/1000]
@@ -208,14 +219,28 @@
                                         }
                                     }
                                 }
-                                
+                                var _DS1 = Tools.dateFormat(new Date(), 'yyyy/MM/dd')
+                                var _DS2 = new Date(_DS1 + ' 08:00').getTime() + index * 60 * 1000
+                                var _fS1 = Tools.dateFormat(new Date(_DS2), 'hh:mm')
+                                    
                                 if (_flag) {
-                                    _str += '<li class="on"></li>'
+                                    _str += '<li class="on" data-time='+ _fS1 +'></li>'
                                 } else {
                                     _str += '<li class="off"></li>'
                                 }
                             }
                             $('.x-1 ul').html(_str)
+                            setTimeout(function() {
+                                var _date = Tools.dateFormat(new Date(), 'yyyy/MM/dd')
+                                var _num = (new Date().getTime() - new Date(_date + ' 08:00').getTime())/(60*1000)
+                                var _num1 = Math.ceil(_num)
+                                if (_num1 < 720) {
+                                    console.log(_num1);
+                                    var _w = $(document.body).width()/2
+                                    var t_a = $("#time-ul-id li").eq(_num1).offset();     
+                                    $(".time-inner").animate({scrollLeft:t_a.left - _w + "px"}, 500); 
+                                }
+                            }, 100)
                         })
                     }
                 }
