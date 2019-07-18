@@ -22,10 +22,10 @@
     <div class="index-con">
         <div class="index-top-outer">
             <ul class="index-build-ul" id="index-build-ul-id">
-                <li data-type="ZH">总行</li>
+                <!-- <li data-type="ZH">总行</li> -->
                 <li data-type="SYDS">深业大厦</li>
-                <li data-type="BSQ">保税区</li>
-                <li data-type="LJZ">陆家嘴</li>
+                <!-- <li data-type="BSQ">保税区</li>
+                <li data-type="LJZ">陆家嘴</li> -->
             </ul>
             <ul class="index-status-ul" id="index-status-ul-id">
                 <li data-type='0' class="active">
@@ -127,7 +127,8 @@
             var Page = {
                 const: {
                     pageParams: {
-                        officeSite: localStorage.getItem('OFFICE_TYPE') || 'ZH', // 职场: 保税区：BSQ；陆家嘴：LJZ；深业大厦：SYDS
+                        // officeSite: localStorage.getItem('OFFICE_TYPE') || 'SYDS', // 职场: 保税区：BSQ；陆家嘴：LJZ；深业大厦：SYDS
+                        officeSite: 'SYDS', // 职场: 保税区：BSQ；陆家嘴：LJZ；深业大厦：SYDS
                         isVideo: 'all', // 视频会议： 是：Y；否：N
                         officeStatus: 'all', // 会议室状态: 忙：1；闲：0
                         scale: 'all' // A：1-10人；B：10-20人；C：20-30人；D：30-40人；E：40-50人；F：50人以上
@@ -274,9 +275,12 @@
                                 '<span>'+_officesCapacity+'人</span>'+
                             '</div>'+
                             '<div class="of-order '+ _ofWordClass +'">'+
-                                '<div class="order-active">立即预定</div>'+
-                                '<div class="ordered-tip">已经预定</div>'+
-                                '<div class="ordered-name">'+_nameS+'</div>'+
+                                // '<div class="order-active">立即预定</div>'+
+                                // '<div class="ordered-tip">已经预定</div>'+
+                                // '<div class="ordered-name">'+_nameS+'</div>'+
+                                '<div class="order-active"></div>'+
+                                '<div class="ordered-tip"></div>'+
+                                '<div class="ordered-name"></div>'+
                             '</div>'+
                             '<div data-opType='+_opType+' data-office='+_officeCode+' class="of-btn '+_btnClass+'">'+
                                 _btnWord+
